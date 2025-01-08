@@ -10,6 +10,7 @@ on:
 jobs:
 
   merge-from-develop:
+    runs-on: ubuntu-latest
     steps:
 
     - name: Merge from Develop to PR
