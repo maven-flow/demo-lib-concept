@@ -33,7 +33,7 @@ jobs:
       uses: maven-flow/merge@v1
       with:
         changelog-rebase: true
-        source-branch: develop
+        source-branch: origin/develop
         target-branch: ${{ env.CURRENT_BRANCH }}
 
     # ensure build is not broken after the merge
