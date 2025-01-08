@@ -23,5 +23,5 @@ jobs:
       uses: maven-flow/merge@v1
       with:
         changelog-rebase: true
-        source-branch: develop
+        source-branch: origin/develop
         target-branch: ${{ github.head_ref }}
