@@ -20,4 +20,4 @@ jobs:
       with:
         changelog-rebase: true
         source-branch: develop
-        target-branch: ${{ github.ref_name }}
+        target-branch: ${{ github.head_ref }}
