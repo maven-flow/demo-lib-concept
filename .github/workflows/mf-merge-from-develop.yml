@@ -22,18 +22,19 @@ jobs:
     - name: Determine Current Branch
       run: |
         if [ "${{ github.event_name }}" = "pull_request" ]; then
-          echo "CURRENT_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
+          branch=${{ github.head_ref }}
         else
-          echo "CURRENT_BRANCH=${{ github.ref }}" >> $GITHUB_ENV
+          branch=${{ github.ref_name }}
         fi
-        echo "Current branch: $CURRENT_BRANCH"
+        echo "Current branch: $branch"
+        echo "CURRENT_BRANCH=$branch" >> $GITHUB_ENV
 
     - name: Merge from Develop to PR
       uses: maven-flow/merge@v1
       with:
         changelog-rebase: true
         source-branch: develop
-        target-branch: $CURRENT_BRANCH
+        target-branch: ${{ env.CURRENT_BRANCH }}
 
     # ensure build is not broken after the merge
     - name: Run Build                   
