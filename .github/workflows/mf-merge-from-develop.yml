@@ -11,9 +11,13 @@ jobs:
 
   merge-from-develop:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write                   # write permission needed to enable GIT push after merge
     steps:
 
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0                  # the full GIT history needs to be checked out
 
     - name: Merge from Develop to PR
       uses: maven-flow/merge@v1
