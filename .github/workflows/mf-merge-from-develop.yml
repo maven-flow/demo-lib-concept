@@ -25,3 +25,9 @@ jobs:
         changelog-rebase: true
         source-branch: origin/develop
         target-branch: ${{ github.head_ref }}
+
+    # ensure build is not broken after the merge
+    - name: Run Build                   
+      run: gh workflow run mf-maven-build.yml --ref ${{ github.head_ref }}
+      env:
+        GH_TOKEN: ${{ github.token }}
