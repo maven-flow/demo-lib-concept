@@ -12,6 +12,7 @@ jobs:
   merge-from-develop:
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       contents: write                   # write permission needed to enable GIT push after merge
     steps:
 
