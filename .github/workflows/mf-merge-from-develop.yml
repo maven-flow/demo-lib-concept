@@ -33,7 +33,7 @@ jobs:
       with:
         changelog-rebase: true
         source-branch: develop
-        target-branch: $CURRENT_BRANCH
+        target-branch: ${{ env.CURRENT_BRANCH }}
 
     # ensure build is not broken after the merge
     - name: Run Build                   
