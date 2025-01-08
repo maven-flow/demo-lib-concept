@@ -1,0 +1,20 @@
+name: MF Merge from Develop
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+  workflow_dispatch:
+
+
+jobs:
+
+  merge-from-develop:
+    steps:
+
+    - name: Merge from Develop to PR
+      uses: maven-flow/merge@v1
+      with:
+        changelog-rebase: true
+        source-branch: develop
+        target-branch: ${{ github.ref_name }}
