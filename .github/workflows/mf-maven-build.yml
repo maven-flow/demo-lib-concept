@@ -1,0 +1,42 @@
+name: MF Maven Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Build with Maven
+      run: mvn -B verify
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Merge to Open Pull Request Branches
+      run: |
+        branches=`gh pr list --state open --base ${{ github.ref_name }} --json headRefName --jq '[.[] | .headRefName]'`
+        echo "Open pull request branches: ${branches}"
+        echo "$branches" | jq -r '.[]' | while read -r branch; do
+          gh workflow run mf-merge-from-develop.yml --ref $branch
+        done
+      env:
+        GH_TOKEN: ${{ github.token }}
