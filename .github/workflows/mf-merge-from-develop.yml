@@ -19,15 +19,24 @@ jobs:
       with:
         fetch-depth: 0                  # the full GIT history needs to be checked out
 
+    - name: Determine Current Branch
+      run: |
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "CURRENT_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
+        else
+          echo "CURRENT_BRANCH=${{ github.ref }}" >> $GITHUB_ENV
+        fi
+        echo "Current branch: $CURRENT_BRANCH"
+
     - name: Merge from Develop to PR
       uses: maven-flow/merge@v1
       with:
         changelog-rebase: true
-        source-branch: origin/develop
-        target-branch: ${{ github.head_ref }}
+        source-branch: develop
+        target-branch: $CURRENT_BRANCH
 
     # ensure build is not broken after the merge
     - name: Run Build                   
-      run: gh workflow run mf-maven-build.yml --ref ${{ github.head_ref }}
+      run: gh workflow run mf-maven-build.yml --ref $CURRENT_BRANCH
       env:
         GH_TOKEN: ${{ github.token }}
