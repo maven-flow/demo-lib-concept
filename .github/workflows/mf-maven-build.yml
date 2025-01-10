@@ -50,3 +50,9 @@ jobs:
         done
       env:
         GH_TOKEN: ${{ github.token }}
+
+    - name: Merge Release to Develop
+      if: startsWith(github.ref_name, 'release/')
+      run: gh workflow run mf-merge-from-release.yml --ref develop -f release-branch=origin/${{ github.ref_name }}
+      env:
+        GH_TOKEN: ${{ github.token }}
